@@ -1,0 +1,26 @@
+server:
+  port: 8088
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: healthcheck
+          uri: lb://service1/api/v1/ping
+          predicates:
+            - Path=/healthcheck
+          filters:
+            - SetPath=/api/v1/ping
+        - id: login
+          uri: lb://account-service/api/v1/users/login
+          predicates:
+            - Path=/login
+          filters:
+            - SetPath=/api/v1/users/login
+
+  application:
+    name: gateway-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL}
